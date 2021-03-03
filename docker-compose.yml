@@ -1,0 +1,33 @@
+version: "3.7"
+
+services:
+  dom-judge:
+    build: ./
+    expose:
+      - '18089'
+    ports:
+      - '18089:18089'
+    networks:
+      - dom_judge_network
+    environment:
+      - DB_HOST=mysqldb
+    depends_on:
+      - mysqldb
+
+  mysqldb:
+    image: mysql:8
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=domjudge
+      - MYSQL_PASSWORD=root
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    networks:
+      - dom_judge_network
+
+networks:
+  dom_judge_network:
+    external: true

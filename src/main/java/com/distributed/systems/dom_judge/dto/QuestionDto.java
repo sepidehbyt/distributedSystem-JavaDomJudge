@@ -2,8 +2,6 @@ package com.distributed.systems.dom_judge.dto;
 
 import lombok.*;
 
-import java.util.Date;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,6 +14,6 @@ public class QuestionDto {
     private String description;
     private String inputPath;
     private String outputPath;
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
 }

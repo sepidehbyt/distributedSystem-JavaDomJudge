@@ -11,5 +11,5 @@ import lombok.*;
 public class AnswerDto {
 
     private QuestionResponseDto question;
-    private AnswerStatus success;
+    private AnswerStatus status;
 }

@@ -8,19 +8,12 @@ import com.distributed.systems.dom_judge.model.User;
 import com.distributed.systems.dom_judge.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.io.*;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -47,6 +40,10 @@ public class QuestionService {
 
     public Question findById(Long id) throws DataAccessException {
         return questionRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    }
+
+    public Question findAvailableById(Long id) throws DataAccessException {
+        return questionRepository.findByIdAndStartDateBeforeAndEndDateAfter(id, new Date(), new Date()).orElseThrow(EntityNotFoundException::new);
     }
 
     public Question uploadPath(Question question, String path, IO io) {

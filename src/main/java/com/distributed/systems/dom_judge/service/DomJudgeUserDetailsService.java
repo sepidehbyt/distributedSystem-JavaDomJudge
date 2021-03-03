@@ -3,7 +3,6 @@ package com.distributed.systems.dom_judge.service;
 import com.distributed.systems.dom_judge.model.User;
 import com.distributed.systems.dom_judge.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;

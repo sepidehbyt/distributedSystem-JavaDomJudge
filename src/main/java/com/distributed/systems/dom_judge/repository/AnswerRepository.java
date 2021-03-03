@@ -15,6 +15,8 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
 
     List<Answer> findAllByUserOrderByCreationDateDesc(User user);
 
+    List<Answer> findAllByUserAndQuestionOrderByCreationDateDesc(User user, Question question);
+
     List<Answer> findAllByQuestionAndStatusOrderByCreationDateAsc(Question question, AnswerStatus status);
 
     List<Answer> findByQuestionAndUser(Question question, User user);

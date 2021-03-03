@@ -27,12 +27,22 @@ public class AnswerService {
         return answerRepository.save(answer);
     }
 
-    public boolean findProcessingByUserAndQuestion(User user, Question question) {
-        return answerRepository.findByQuestionAndUserAndStatus(question, user, AnswerStatus.PROCESSING).isPresent();
+    public Answer updateStatus(Answer answer, AnswerStatus status) {
+        answer.setStatus(status);
+        return answerRepository.save(answer);
+    }
+
+    public boolean findProcessingOrSuccessByUserAndQuestion(User user, Question question) {
+        return answerRepository.findByQuestionAndUserAndStatus(question, user, AnswerStatus.SUCCESS).isPresent() ||
+                answerRepository.findByQuestionAndUserAndStatus(question, user, AnswerStatus.PROCESSING).isPresent();
     }
 
     public List<Answer> findMyAnswers(User user) {
         return answerRepository.findAllByUserOrderByCreationDateDesc(user);
+    }
+
+    public List<Answer> findMyAnswersByQuestion(User user, Question question) {
+        return answerRepository.findAllByUserAndQuestionOrderByCreationDateDesc(user, question);
     }
 
     public List<Answer> findAllWinners(Question question) {

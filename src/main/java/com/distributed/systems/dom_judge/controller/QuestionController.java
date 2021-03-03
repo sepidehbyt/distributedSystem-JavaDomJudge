@@ -7,7 +7,7 @@ import com.distributed.systems.dom_judge.mapper.QuestionMapper;
 import com.distributed.systems.dom_judge.model.Question;
 import com.distributed.systems.dom_judge.model.User;
 import com.distributed.systems.dom_judge.service.QuestionService;
-import com.distributed.systems.dom_judge.service.UploadService;
+import com.distributed.systems.dom_judge.service.ResourceService;
 import com.distributed.systems.dom_judge.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +27,12 @@ public class QuestionController {
     private final QuestionService questionService;
     private final QuestionMapper questionMapper;
     private final UserService userService;
-    private final UploadService uploadService;
+    private final ResourceService uploadService;
 
     public QuestionController(QuestionService questionService,
                               QuestionMapper questionMapper,
                               UserService userService,
-                              UploadService uploadService) {
+                              ResourceService uploadService) {
         this.questionService = questionService;
         this.questionMapper = questionMapper;
         this.userService = userService;
@@ -60,8 +60,9 @@ public class QuestionController {
             else if (!optional.get().equals("txt"))
                 return new ResponseEntity<>(new GenericRestResponse<>(GenericRestResponse.STATUS.FAILURE), HttpStatus.INTERNAL_SERVER_ERROR);
             Question question = questionService.findById(questionId);
-            String name = "question_".concat(String.valueOf(questionId)).concat("_").concat(io.toString());
-            String path = uploadService.saveNewResourceInFile(uploadFile, name, optional.get().toLowerCase());
+            String folderName = "question_".concat(String.valueOf(questionId)).concat("_").concat(io.toString());
+            String fileName = uploadService.getFileActualName(uploadFile.getOriginalFilename());
+            String path = uploadService.saveNewResourceInFile(uploadFile, fileName, folderName, optional.get().toLowerCase());
             if(path == null)
                 return new ResponseEntity<>(new GenericRestResponse<>(GenericRestResponse.STATUS.FAILURE), HttpStatus.INTERNAL_SERVER_ERROR);
             question = questionService.uploadPath(question, path, io);
