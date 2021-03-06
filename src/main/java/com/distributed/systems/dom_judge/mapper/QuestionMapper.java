@@ -7,20 +7,15 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public abstract class QuestionMapper {
 
-    @Value("${dom.judge.server.url}")
-    private String serverURL;
-
     @Mapping(target = "startDate", source = "startDate", dateFormat = "yyyy-MM-dd")
     @Mapping(target = "endDate", source = "endDate", dateFormat = "yyyy-MM-dd")
-    public abstract QuestionDto
-    toDto(Question question);
+    public abstract QuestionDto toDto(Question question);
 
     public abstract List<QuestionDto> toDto(List<Question> entityList);
 
@@ -35,8 +30,8 @@ public abstract class QuestionMapper {
     @AfterMapping
     protected void updateIO(@MappingTarget QuestionDto questionDto) {
         if(questionDto.getInputPath() != null)
-            questionDto.setInputPath(serverURL.concat(questionDto.getInputPath()));
+            questionDto.setInputPath(questionDto.getId() + "*" + questionDto.getInputPath().substring(6));
         if(questionDto.getOutputPath() != null)
-        questionDto.setOutputPath(serverURL.concat(questionDto.getOutputPath()));
+            questionDto.setOutputPath(questionDto.getId() + "*" + questionDto.getOutputPath().substring(6));
     }
 }

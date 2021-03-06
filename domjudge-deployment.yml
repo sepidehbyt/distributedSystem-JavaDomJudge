@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: domjudge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: domjudge
+  template:
+    metadata:
+      labels:
+        app: domjudge
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/path: '/actuator/prometheus'
+        prometheus.io/port: '18089'
+    spec:
+      volumes:
+        - name: 'data'
+          persistentVolumeClaim:
+            claimName: shared-media-claim
+      containers:
+        - name: domjudge
+          image: dom-judge
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DB_HOST
+              value: "mysql"
+          ports:
+            - containerPort: 18089
+          readinessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            httpGet:
+              path: /health
+              port: 18089
+          resources:
+            limits:
+              cpu: 500m
+            requests:
+              cpu: 200m
